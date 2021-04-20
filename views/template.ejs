@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Qoute Generator</title>
+
+	<style type="text/css">
+		* {
+			padding: 0px;
+			margin: 0px;
+		}
+
+		body {
+			background-color: #1B1212;
+		}
+
+		.qoute__container {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: #1e88ce;
+			width: 350px;
+			height: 350px;
+			text-align: center;
+			box-shadow: 
+				0 0 0 3px rgba(255, 255, 255, 0.5),
+				0 0 0 6px rgba(255, 255, 255, 0.5),
+				0 0 0 9px rgba(255, 255, 255, 0.5);
+			color: #1B1212;
+		}
+
+		div {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%); 
+		}
+
+		div > p{
+			margin-top: 1rem;
+			margin-bottom: 0.5rem;
+		}
+		div > h3{
+			margin-bottom: 0.5rem;
+		}
+	</style>
+</head>
+<body>
+
+	<section class="qoute__container">
+		<div>
+			<h3 class="header">Random Qoute Generator</h3>
+			<hr>
+			<p class="qoute"><%=qoute%></p>
+			<i class="author">- <%=author%></i>
+		</div>
+	</section>
+
+
+</body>
+</html>
