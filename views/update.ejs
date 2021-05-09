@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Qoute Update</title>
+</head>
+<body>
+
+	<section class="form-section">
+		<form action="/api/qoute/qoute_update" method="POST">
+			<fieldset>
+				<div>
+					<label>ID of Qoute to be Updated</label> <br>
+					<input type="text" name="id">
+				</div>
+				<br>
+				<div>
+					<label>Author's name</label> <br>
+					<input type="text" name="author">
+				</div>
+				<br>
+				<div>
+					<label>Type your qoute here</label> <br>
+					<textarea name="qoute"></textarea>
+				</div>
+				<div>
+					<input type="submit">
+				</div>
+			</fieldset>
+		</form>
+	</section>
+
+</body>
+</html>

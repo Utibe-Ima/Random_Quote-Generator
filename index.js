@@ -2,12 +2,13 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const path = require('path');
-const PORT = process.env.PORT || 3000;
-const filePath = './json/qoute.json'
+const PORT = process.env.PORT || 8000;
+const filePath = './json/qoute.json';
 
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+app.use(express.static(path.join(__dirname, "public")));
 
 function shuffleArray(min, max) {
 	min = Math.ceil(min);
@@ -15,7 +16,10 @@ function shuffleArray(min, max) {
 	return Math.floor(Math.random()*(max - min +1) + min);
 } 
  
-app.get('/', (req, res) => {
+
+
+
+app.get('/randomqoute', (req, res) => {
 	fs.readFile(filePath, 'utf8', (err, jsonFile) => {
 		let jsonData = JSON.parse(jsonFile);
 		let maxValue = jsonData.length - 1;
@@ -30,28 +34,41 @@ app.get('/', (req, res) => {
 
 app.get('/api/qoute', (req, res) => {
 	fs.readFile(filePath, 'utf8', (err, data) => {
-		let result = JSON.parse(data);
-		res.send(result);
-	})
+		let allData = JSON.parse(data);
+		if (err) {
+			console.log("ERROR!!!");
+		} else {
+			res.render("viewall", {
+				allData: allData
+			});
+		}
+	})	
 });
 
-app.post('/api/qoute', (req, res) => {
- 
-	let newQoute = req.body;
+app.get('/api/qoute/createnew', (req, res) => {
+	res.render("create");
+})
 
+
+app.post('/api/qoute/create', (req, res) => {
+	let newQoute = req.body;
 	 fs.readFile(filePath, 'utf8', (err, content) => {
 	 	var arr = JSON.parse(content);
 	 	arr.push(newQoute);
-	 	var sendArr = JSON.stringify(arr)
-	 	res.send(sendArr);
-
-	 	fs.writeFile(filePath, sendArr, (err) => {
-	 		console.log('Qoute has been added');
+	 	var sendArr = JSON.stringify(arr);
+		fs.writeFile(filePath, sendArr, (err) => {
+			console.log("Qoute has been created");
 	 	})
 	 })
+	res.redirect('/api/qoute');
+	 
 });
 
-app.put('/api/qoute', (req, res) => {
+app.get('/api/qoute/updatenew', (req, res) => {
+	res.render("update");
+})
+
+app.put('/api/qoute/qoute_update', (req, res) => {
 	fs.readFile(filePath, 'utf8', (err, data) => {
 		let newData = JSON.parse(data);
 		let qouteToBeReplaced = req.body.id;
@@ -64,25 +81,34 @@ app.put('/api/qoute', (req, res) => {
 		res.send(sendNewData);
 		
 		fs.writeFile(filePath, sendNewData, (err) => {
-			console.log('successful');
+				if (err) {
+					res.render("update");
+				} else {
+					res.redirect('/randomqoute');
+				}
 		})
 
 	})
 });
 
-app.delete('/api/qoute', (req, res)=> {
+
+app.get('/api/qoute/deleteqoute', (req, res) => {
+	res.render("delete");
+})
+
+app.delete('/api/qoute/delete', (req, res)=> {
 	fs.readFile(filePath, 'utf8', (err, fileContent) => {
 		let readFile = JSON.parse(fileContent);
-		let arrIndex = req.body.id;
+		var arrIndex = req.body.id;
 		let id = parseInt(arrIndex); 
 		readFile.splice(id, 1)
 		let newFile = JSON.stringify(readFile)
 
 		fs.writeFile(filePath, newFile, (err) => {
-			res.send(readFile);
-			console.log('Qoute has been deleted');
+			console.log('Qoute has been deleted')	
 		})
 	});
+	res.redirect('/api/qoute');
 });
 
 
